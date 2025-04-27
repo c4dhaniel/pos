@@ -8,7 +8,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
-    
+
+
     
 </head>
 <body>
@@ -16,9 +17,16 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
         <div class="container">
             <a class="navbar-brand" href="#">Punto de Venta</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+            
+            <!-- Indicador visual de categorías -->
+            <div class="d-lg-none d-flex align-items-center me-3">
+                <!--<small class="text-white me-2">Categorías:</small>-->
+                <button class="btn btn-outline-light btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    Ver carta <i class="bi bi-arrow-down-short"></i>
+                </button>
+            </div>
+            
+                
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav" id="categoryNav">
                     <li class="nav-item">
@@ -37,7 +45,7 @@
             </div>
         </div>
     </nav>
-    
+
     <div class="container my-4">
         <!-- Contenedor de productos -->
         <div class="row" id="productsContainer">
@@ -109,7 +117,7 @@
     <script src="js/productos.js"></script>
     <script>
         // Etiquetas genéricas que se pueden usar en cualquier producto
-        const commonTags = ["PA LLEVAR", "PA IR COMIENDO"];
+        const commonTags = ["Para llevar", "Porción adicional", "Urgente"];
 
         // Carrito de compras
         let cart = [];
@@ -149,10 +157,13 @@
             });
         }
 
-        // Función para crear badges de etiquetas
+        // Función para crear badges de etiquetas con estado de selección
         function createTagBadges(tags, targetInput) {
             const tagsContainer = document.createElement('div');
             tagsContainer.className = 'tags-container d-flex flex-wrap';
+            
+            // Objeto para almacenar las etiquetas seleccionadas
+            const selectedTags = {};
             
             tags.forEach(tag => {
                 const badge = document.createElement('span');
@@ -164,20 +175,82 @@
                     'badge bg-secondary tag-badge';
                 
                 badge.textContent = tag;
+                badge.setAttribute('data-tag', tag);
+                
                 badge.addEventListener('click', function() {
-                    // Si el input está vacío, solo agregar la etiqueta
-                    if (!targetInput.value.trim()) {
-                        targetInput.value = tag;
+                    const tagText = this.getAttribute('data-tag');
+                    
+                    // Verificar si la etiqueta ya está seleccionada
+                    if (selectedTags[tagText]) {
+                        // Quitar la clase de seleccionado
+                        this.classList.remove('tag-selected');
+                        
+                        // Restaurar el color original
+                        if (isGeneric) {
+                            this.classList.add('tag-badge-generic');
+                        } else {
+                            this.classList.remove('tag-badge-generic');
+                        }
+                        
+                        // Eliminar la etiqueta del input
+                        const currentTags = targetInput.value
+                            .split(',')
+                            .map(t => t.trim())
+                            .filter(t => t !== tagText && t !== '');
+                        
+                        targetInput.value = currentTags.join(', ');
+                        
+                        // Marcar como no seleccionada
+                        selectedTags[tagText] = false;
                     } else {
-                        // Si ya tiene texto, agregar con separador
-                        targetInput.value += (targetInput.value.endsWith(' ') ? '' : ', ') + tag;
+                        // Añadir clase de seleccionado
+                        this.classList.add('tag-selected');
+                        
+                        // Si el input está vacío, solo agregar la etiqueta
+                        if (!targetInput.value.trim()) {
+                            targetInput.value = tagText;
+                        } else {
+                            // Si ya tiene texto, agregar con separador
+                            targetInput.value += (targetInput.value.endsWith(' ') ? '' : ', ') + tagText;
+                        }
+                        
+                        // Marcar como seleccionada
+                        selectedTags[tagText] = true;
                     }
                     
                     // Prevenir que se abra el teclado al hacer clic en una etiqueta
-                    // Mantener el texto actual en el input pero sin enfocar
                     targetInput.blur();
                 });
+                
                 tagsContainer.appendChild(badge);
+            });
+            
+            // Añadir evento para sincronizar etiquetas cuando se edite manualmente el input
+            targetInput.addEventListener('input', function() {
+                const currentTags = this.value
+                    .split(',')
+                    .map(t => t.trim())
+                    .filter(t => t !== '');
+                
+                // Actualizar el estado visual de las etiquetas
+                tagsContainer.querySelectorAll('.tag-badge').forEach(badge => {
+                    const tagText = badge.getAttribute('data-tag');
+                    const isGeneric = commonTags.includes(tagText);
+                    const isSelected = currentTags.includes(tagText);
+                    
+                    if (isSelected) {
+                        badge.classList.add('tag-selected');
+                        selectedTags[tagText] = true;
+                    } else {
+                        badge.classList.remove('tag-selected');
+                        selectedTags[tagText] = false;
+                        
+                        // Restaurar el color original
+                        if (isGeneric) {
+                            badge.classList.add('tag-badge-generic');
+                        }
+                    }
+                });
             });
             
             return tagsContainer;
@@ -223,7 +296,7 @@
                 // Título de la unidad
                 const unitTitle = document.createElement('h6');
                 unitTitle.className = 'border-bottom pb-2 mb-2';
-                unitTitle.textContent = `Unidad ${i}:`;
+                unitTitle.textContent = `Und. ${i}:`;
                 detailGroup.appendChild(unitTitle);
                 
                 // Input para detalles
@@ -233,7 +306,7 @@
                 const detailInput = document.createElement('textarea');
                 detailInput.className = 'form-control';
                 detailInput.id = `modal-detail-${i}`;
-                detailInput.placeholder = "Especificaciones para esta unidad...";
+                detailInput.placeholder = detailInput.placeholder = `Especificaciones para: ${product.name} ${i}`;
                 detailInput.rows = 2;
 
                 // Añadir un evento click al textarea para el control de enfoque
@@ -249,7 +322,7 @@
                 if (combinedTags.length > 0) {
                     const tagsTitle = document.createElement('small');
                     tagsTitle.className = 'text-muted mb-1 d-block';
-                    tagsTitle.textContent = 'Sugerencias (clic para agregar):';
+                    tagsTitle.textContent = 'Sugerencias (clic para agregar/quitar):';
                     detailGroup.appendChild(tagsTitle);
                     
                     const tagBadges = createTagBadges(combinedTags, detailInput);
@@ -392,7 +465,9 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between">
                                 <h5>${item.product.name}</h5>
-                                <button class="btn btn-sm btn-danger remove-item" data-index="${index}">X</button>
+                                <button class="btn btn-sm btn-danger remove-item" data-index="${index}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </div>
                             <p>Cantidad: ${item.quantity} x S/${item.product.price.toFixed(2)} = S/${item.subtotal.toFixed(2)}</p>
                             <div class="details-list">
@@ -474,6 +549,7 @@
                 }
             });
         });
+
 
         // Inicializar la página
         document.addEventListener('DOMContentLoaded', function() {

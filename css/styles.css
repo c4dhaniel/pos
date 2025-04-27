@@ -86,5 +86,22 @@ color: white;
    
 /* Nuevo estilo para las etiquetas genéricas */
 .tag-badge-generic {
-    background-color: #28a745 !important; /* Color verde para etiquetas genéricas */
+   /* background-color: #28a745 !important; /* Color verde para etiquetas genéricas */
+}
+
+/* Estilo para etiquetas seleccionadas */
+.tag-selected {
+background-color: #0d6efd !important; /* Color azul para etiquetas seleccionadas */
+}
+
+@media (max-width: 991.98px) {
+	.category-chips {
+		position: sticky;
+		top: 0;
+		z-index: 1020;
+		background-color: #fff;
+		padding-top: 8px;
+		padding-bottom: 8px;
+		box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+	}
 }
