@@ -8,7 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="css/styles.css">
-
+    
     
 </head>
 <body>
@@ -45,6 +45,38 @@
         </div>
     </div>
     
+    <!-- Modal para detalles de producto -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="detailsModalLabel">Detalles del Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="product-info mb-3">
+                        <h4 id="modalProductName"></h4>
+                        <p id="modalProductPrice"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="modalQuantity" class="form-label">Cantidad:</label>
+                        <input type="number" class="form-control" id="modalQuantity" value="1" min="1">
+                    </div>
+                    <div class="mb-3">
+                        <h5>Especificaciones:</h5>
+                        <div id="modalDetailsContainer" class="modal-details-container">
+                            <!-- Los inputs de detalles se generarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="confirmAddToCart">Agregar al Carrito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <!-- Botón flotante del carrito -->
     <button class="btn btn-primary" id="cartButton" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
         <i class="bi bi-cart-fill fs-4"></i>
@@ -64,7 +96,7 @@
             <hr>
             <div class="d-flex justify-content-between">
                 <h4>Total:</h4>
-                <h4 id="totalAmount">$0.00</h4>
+                <h4 id="totalAmount">S/0.00</h4>
             </div>
             <button id="sendOrder" class="btn btn-success btn-lg w-100 mt-3">
                 <i class="bi bi-whatsapp"></i> Enviar Pedido por WhatsApp
@@ -74,11 +106,15 @@
     
     <!-- Contenedor para las alertas toast -->
     <div class="toast-container" id="toastContainer"></div>
-    <!--<script src="js/productos.js"></script>-->
     <script src="js/productos.js"></script>
     <script>
+        
+        // Etiquetas genéricas que se pueden usar en cualquier producto
+        const commonTags = ["PA LLEVAR", "PA IR COMIENDO"];
+
         // Carrito de compras
         let cart = [];
+        let currentProductId = null;
 
         // Función para mostrar productos
         function displayProducts(category = 'todos') {
@@ -98,16 +134,7 @@
                         <div class="card-body">
                             <h5 class="card-title">${product.name}</h5>
                             <p class="card-text">S/${product.price.toFixed(2)}</p>
-                            <div class="mb-3">
-                                <label for="quantity-${product.id}" class="form-label">Cantidad:</label>
-                                <input type="number" class="form-control quantity-input" 
-                                       id="quantity-${product.id}" value="1" min="1" 
-                                       data-product-id="${product.id}">
-                            </div>
-                            <div id="details-container-${product.id}" class="detail-inputs mb-3">
-                                <!-- Los inputs de detalles se generarán dinámicamente -->
-                            </div>
-                            <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
+                            <button class="btn btn-primary w-100 open-details" data-product-id="${product.id}">
                                 Agregar al Carrito
                             </button>
                         </div>
@@ -115,40 +142,133 @@
                 `;
                 container.appendChild(productCard);
                 
-                // Añadir event listener para cambio de cantidad
-                const quantityInput = productCard.querySelector(`#quantity-${product.id}`);
-                quantityInput.addEventListener('change', function() {
-                    updateDetailInputs(product.id, parseInt(this.value));
-                });
-                
-                // Inicializar inputs de detalles
-                updateDetailInputs(product.id, 1);
-                
-                // Añadir evento para agregar al carrito
-                const addButton = productCard.querySelector('.add-to-cart');
-                addButton.addEventListener('click', function() {
-                    addToCart(product.id);
+                // Añadir evento para abrir modal de detalles
+                const detailsButton = productCard.querySelector('.open-details');
+                detailsButton.addEventListener('click', function() {
+                    openDetailsModal(product.id);
                 });
             });
         }
 
-        // Función para actualizar inputs de detalles basado en la cantidad
-        function updateDetailInputs(productId, quantity) {
-            const detailsContainer = document.getElementById(`details-container-${productId}`);
+        // Función para crear badges de etiquetas
+        function createTagBadges(tags, targetInput) {
+            const tagsContainer = document.createElement('div');
+            tagsContainer.className = 'tags-container d-flex flex-wrap';
+            
+            tags.forEach(tag => {
+                const badge = document.createElement('span');
+                
+                // Verificar si es una etiqueta genérica para aplicar clase diferente
+                const isGeneric = commonTags.includes(tag);
+                badge.className = isGeneric ? 
+                    'badge bg-secondary tag-badge tag-badge-generic' : 
+                    'badge bg-secondary tag-badge';
+                
+                badge.textContent = tag;
+                badge.addEventListener('click', function() {
+                    // Si el input está vacío, solo agregar la etiqueta
+                    if (!targetInput.value.trim()) {
+                        targetInput.value = tag;
+                    } else {
+                        // Si ya tiene texto, agregar con separador
+                        targetInput.value += (targetInput.value.endsWith(' ') ? '' : ', ') + tag;
+                    }
+                    targetInput.focus();
+                });
+                tagsContainer.appendChild(badge);
+            });
+            
+            return tagsContainer;
+        }
+
+        // Función para abrir el modal de detalles
+        function openDetailsModal(productId) {
+            currentProductId = productId;
+            const product = products.find(p => p.id === productId);
+            
+            // Actualizar información del producto en el modal
+            document.getElementById('modalProductName').textContent = product.name;
+            document.getElementById('modalProductPrice').textContent = `Precio: S/${product.price.toFixed(2)}`;
+            
+            // Resetear cantidad
+            const quantityInput = document.getElementById('modalQuantity');
+            quantityInput.value = 1;
+            
+            // Actualizar inputs de detalles
+            updateModalDetailInputs(1, product);
+            
+            // Mostrar el modal
+            const detailsModal = new bootstrap.Modal(document.getElementById('detailsModal'));
+            detailsModal.show();
+        }
+
+        // Función para actualizar inputs de detalles en el modal basado en la cantidad
+        function updateModalDetailInputs(quantity, product) {
+            const detailsContainer = document.getElementById('modalDetailsContainer');
             detailsContainer.innerHTML = '';
-            detailsContainer.style.display = quantity > 0 ? 'block' : 'none';
+            
+            if (quantity <= 0) {
+                quantity = 1; // Asegurar que siempre hay al menos un input
+            }
+            
+            // Combinar etiquetas específicas del producto con las etiquetas comunes
+            const combinedTags = [...(product.tags || []), ...commonTags];
             
             for (let i = 1; i <= quantity; i++) {
-                const detailInput = document.createElement('div');
-                detailInput.className = 'mb-2';
-                detailInput.innerHTML = `
-                    <label for="detail-${productId}-${i}" class="form-label">Detalle ${i}:</label>
-                    <input type="text" class="form-control" id="detail-${productId}-${i}" 
-                           placeholder="Especificaciones...">
-                `;
-                detailsContainer.appendChild(detailInput);
+                const detailGroup = document.createElement('div');
+                detailGroup.className = 'mb-4';
+                
+                // Título de la unidad
+                const unitTitle = document.createElement('h6');
+                unitTitle.className = 'border-bottom pb-2 mb-2';
+                unitTitle.textContent = `Unidad ${i}:`;
+                detailGroup.appendChild(unitTitle);
+                
+                // Input para detalles
+                const inputDiv = document.createElement('div');
+                inputDiv.className = 'mb-2';
+                
+                const detailInput = document.createElement('textarea');
+                detailInput.className = 'form-control';
+                detailInput.id = `modal-detail-${i}`;
+                detailInput.placeholder = "Especificaciones para esta unidad...";
+                detailInput.rows = 2;
+                
+                inputDiv.appendChild(detailInput);
+                detailGroup.appendChild(inputDiv);
+                
+                // Contenedor de etiquetas sugeridas
+                if (combinedTags.length > 0) {
+                    const tagsTitle = document.createElement('small');
+                    tagsTitle.className = 'text-muted mb-1 d-block';
+                    tagsTitle.textContent = 'Sugerencias (clic para agregar):';
+                    detailGroup.appendChild(tagsTitle);
+                    
+                    const tagBadges = createTagBadges(combinedTags, detailInput);
+                    detailGroup.appendChild(tagBadges);
+                }
+                
+                detailsContainer.appendChild(detailGroup);
             }
         }
+
+        // Escuchar cambios en la cantidad del modal
+        document.getElementById('modalQuantity').addEventListener('input', function() {
+            const quantity = parseInt(this.value) || 0;
+            const product = products.find(p => p.id === currentProductId);
+            updateModalDetailInputs(quantity, product);
+        });
+
+        // Evento para confirmar agregar al carrito desde el modal
+        document.getElementById('confirmAddToCart').addEventListener('click', function() {
+            if (currentProductId === null) return;
+            
+            addToCart(currentProductId);
+            
+            // Cerrar el modal
+            const detailsModal = bootstrap.Modal.getInstance(document.getElementById('detailsModal'));
+            detailsModal.hide();
+        });
 
         // Función para mostrar notificación toast
         function showToast(message) {
@@ -185,7 +305,7 @@
         // Función para agregar productos al carrito
         function addToCart(productId) {
             const product = products.find(p => p.id === productId);
-            const quantityInput = document.getElementById(`quantity-${productId}`);
+            const quantityInput = document.getElementById('modalQuantity');
             const quantity = parseInt(quantityInput.value);
             
             if (quantity <= 0) {
@@ -193,10 +313,10 @@
                 return;
             }
             
-            // Recopilar detalles de cada unidad
+            // Recopilar detalles de cada unidad desde el modal
             const details = [];
             for (let i = 1; i <= quantity; i++) {
-                const detailInput = document.getElementById(`detail-${productId}-${i}`);
+                const detailInput = document.getElementById(`modal-detail-${i}`);
                 details.push(detailInput.value || 'Sin especificaciones');
             }
             
@@ -235,10 +355,6 @@
             
             // Actualizar visualización del carrito
             updateCartDisplay();
-            
-            // Resetear los inputs
-            quantityInput.value = 1;
-            updateDetailInputs(productId, 1);
         }
 
         // Función para actualizar la visualización del carrito
@@ -270,7 +386,7 @@
                                 <h5>${item.product.name}</h5>
                                 <button class="btn btn-sm btn-danger remove-item" data-index="${index}">X</button>
                             </div>
-                            <p>Cantidad: ${item.quantity} x S/${item.product.price.toFixed(2)} = $${item.subtotal.toFixed(2)}</p>
+                            <p>Cantidad: ${item.quantity} x S/${item.product.price.toFixed(2)} = S/${item.subtotal.toFixed(2)}</p>
                             <div class="details-list">
                                 <strong>Detalles:</strong>
                                 <ul>

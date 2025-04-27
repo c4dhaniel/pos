@@ -60,3 +60,31 @@ z-index: 1090;
 background-color: rgba(40, 167, 69, 0.9);
 color: white;
 }
+
+.modal-details-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+/* Estilos para las etiquetas sugeridas */
+.tags-container {
+	margin-bottom: 10px;
+}
+
+.tag-badge {
+	cursor: pointer;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	transition: all 0.2s;
+}
+
+.tag-badge:hover {
+	transform: scale(1.05);
+	opacity: 0.9;
+}
+
+   
+/* Nuevo estilo para las etiquetas genéricas */
+.tag-badge-generic {
+    background-color: #28a745 !important; /* Color verde para etiquetas genéricas */
+}
