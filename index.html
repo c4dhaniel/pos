@@ -108,7 +108,6 @@
     <div class="toast-container" id="toastContainer"></div>
     <script src="js/productos.js"></script>
     <script>
-        
         // Etiquetas genéricas que se pueden usar en cualquier producto
         const commonTags = ["PA LLEVAR", "PA IR COMIENDO"];
 
@@ -173,7 +172,10 @@
                         // Si ya tiene texto, agregar con separador
                         targetInput.value += (targetInput.value.endsWith(' ') ? '' : ', ') + tag;
                     }
-                    targetInput.focus();
+                    
+                    // Prevenir que se abra el teclado al hacer clic en una etiqueta
+                    // Mantener el texto actual en el input pero sin enfocar
+                    targetInput.blur();
                 });
                 tagsContainer.appendChild(badge);
             });
@@ -233,6 +235,12 @@
                 detailInput.id = `modal-detail-${i}`;
                 detailInput.placeholder = "Especificaciones para esta unidad...";
                 detailInput.rows = 2;
+
+                // Añadir un evento click al textarea para el control de enfoque
+                detailInput.addEventListener('click', function() {
+                    // Si el usuario hace clic directamente en el textarea, permitir enfoque
+                    this.focus();
+                });
                 
                 inputDiv.appendChild(detailInput);
                 detailGroup.appendChild(inputDiv);
