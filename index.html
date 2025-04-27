@@ -1,317 +1,361 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Punto de Venta</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link 
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" 
-    rel="stylesheet">
-  <style>
-    .sticky-nav {
-      position: fixed;
-      bottom: 0;
-      width: 100%;
-      z-index: 999;
-    }
-    .product-card {
-      margin-bottom: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Punto de Venta</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+
+    
 </head>
 <body>
-
-<div class="container mt-4">
-
-  <h2 class="mb-4">Catálogo</h2>
-
-  <!-- Tabs -->
-  <ul class="nav nav-tabs mb-4" id="categoriaTabs" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#categoria1" type="button">Categoría 1</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#categoria2" type="button">Categoría 2</button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#categoria3" type="button">Categoría 3</button>
-    </li>
-  </ul>
-
-  <form id="pedidoForm">
-    <div class="tab-content">
-      <div class="tab-pane fade show active" id="categoria1">
-        <div class="row">
-          <!--PRODUCTO-->
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Clasica</h5>
-                <p>Precio: S/ <span class="precio">10</span></p>
-                <label>Cantidad</label>
-                <label>Cantidad</label>
-                <div class="input-group cantidad-grupo">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, -1)">−</button>
-                  <input type="text" class="form-control text-center cantidad" value="0" readonly data-producto="192">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, 1)">+</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(192)">Elegir Cremas</button>
-              </div>
+    <!-- Barra de navegación con menú hamburguesa -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">Punto de Venta</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav" id="categoryNav">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-category="todos" href="#">Todos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-category="comidas" href="#">Comidas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-category="bebidas" href="#">Bebidas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-category="postres" href="#">Postres</a>
+                    </li>
+                </ul>
             </div>
-          </div> 
-          <!--FIN PRODUCTO-->
-          <!--PRODUCTO-->
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Clasica</h5>
-                <p>Precio: S/ <span class="precio">10</span></p>
-                <label>Cantidad</label>
-                <label>Cantidad</label>
-                <div class="input-group cantidad-grupo">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, -1)">−</button>
-                  <input type="text" class="form-control text-center cantidad" value="0" readonly data-producto="192">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, 1)">+</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(192)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div> 
-          <!--FIN PRODUCTO-->
-          <!--PRODUCTO-->
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Clasica</h5>
-                <p>Precio: S/ <span class="precio">10</span></p>
-                <label>Cantidad</label>
-                <label>Cantidad</label>
-                <div class="input-group cantidad-grupo">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, -1)">−</button>
-                  <input type="text" class="form-control text-center cantidad" value="0" readonly data-producto="192">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, 1)">+</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(192)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div> 
-          <!--FIN PRODUCTO-->
-          <!--PRODUCTO-->
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Clasica</h5>
-                <p>Precio: S/ <span class="precio">10</span></p>
-                <label>Cantidad</label>
-                <label>Cantidad</label>
-                <div class="input-group cantidad-grupo">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, -1)">−</button>
-                  <input type="text" class="form-control text-center cantidad" value="0" readonly data-producto="192">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, 1)">+</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(192)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div> 
-          <!--FIN PRODUCTO-->
-          <!--PRODUCTO-->
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Clasica</h5>
-                <p>Precio: S/ <span class="precio">10</span></p>
-                <label>Cantidad</label>
-                <label>Cantidad</label>
-                <div class="input-group cantidad-grupo">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, -1)">−</button>
-                  <input type="text" class="form-control text-center cantidad" value="0" readonly data-producto="192">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, 1)">+</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(192)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div> 
-          <!--FIN PRODUCTO-->
-          <!--PRODUCTO-->
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Clasica</h5>
-                <p>Precio: S/ <span class="precio">10</span></p>
-                <label>Cantidad</label>
-                <label>Cantidad</label>
-                <div class="input-group cantidad-grupo">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, -1)">−</button>
-                  <input type="text" class="form-control text-center cantidad" value="0" readonly data-producto="192">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, 1)">+</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(192)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div> 
-          <!--FIN PRODUCTO-->
-          <!--PRODUCTO-->
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Clasica</h5>
-                <p>Precio: S/ <span class="precio">10</span></p>
-                <label>Cantidad</label>
-                <label>Cantidad</label>
-                <div class="input-group cantidad-grupo">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, -1)">−</button>
-                  <input type="text" class="form-control text-center cantidad" value="0" readonly data-producto="192">
-                  <button class="btn btn-outline-secondary" type="button" onclick="cambiarCantidad(this, 1)">+</button>
-                </div>
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(192)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div> 
-          <!--FIN PRODUCTO-->       
-          
         </div>
-
-      </div>
-
-      <!-- Categoría 2 -->
-      <div class="tab-pane fade" id="categoria2">
-        <div class="row">
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Producto B</h5>
-                <p>Precio: S/ <span class="precio">15</span></p>
-                <label>Cantidad</label>
-                <input type="number" class="form-control cantidad" min="1" value="1" data-producto="1">
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(1)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div>
+    </nav>
+    
+    <div class="container my-4">
+        <!-- Contenedor de productos -->
+        <div class="row" id="productsContainer">
+            <!-- Los productos se agregarán dinámicamente -->
         </div>
-      </div>
-
-      <!-- Categoría 3 -->
-      <div class="tab-pane fade" id="categoria3">
-        <div class="row">
-          <div class="col-6 col-md-3 product-card">
-            <div class="card h-100">
-              <div class="card-body">
-                <h5 class="card-title">Producto C</h5>
-                <p>Precio: S/ <span class="precio">12</span></p>
-                <label>Cantidad</label>
-                <input type="number" class="form-control cantidad" min="1" value="1" data-producto="2">
-                <button type="button" class="btn btn-sm btn-primary mt-2" onclick="abrirModal(2)">Elegir Cremas</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
-  </form>
-</div>
-
-<!-- Botón fijo -->
-<nav class="navbar bg-success sticky-nav">
-  <div class="container-fluid justify-content-center">
-    <button class="btn btn-light" onclick="enviarPedido()">Enviar Pedido por WhatsApp</button>
-  </div>
-</nav>
-
-<!-- Modal -->
-<div class="modal fade" id="modalCremas" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Elegir:</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-      </div>
-      <div class="modal-body" id="contenidoModal"></div>
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-      </div>
+    
+    <!-- Botón flotante del carrito -->
+    <button class="btn btn-primary" id="cartButton" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+        <i class="bi bi-cart-fill fs-4"></i>
+        <span id="cartCount">0</span>
+    </button>
+    
+    <!-- Offcanvas del carrito -->
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+        <div class="offcanvas-header bg-primary text-white">
+            <h5 class="offcanvas-title" id="cartOffcanvasLabel">Resumen del Pedido</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="cartItems">
+                <p>No hay productos en el carrito</p>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <h4>Total:</h4>
+                <h4 id="totalAmount">$0.00</h4>
+            </div>
+            <button id="sendOrder" class="btn btn-success btn-lg w-100 mt-3">
+                <i class="bi bi-whatsapp"></i> Enviar Pedido por WhatsApp
+            </button>
+        </div>
     </div>
-  </div>
-</div>
+    
+    <!-- Contenedor para las alertas toast -->
+    <div class="toast-container" id="toastContainer"></div>
+    <!--<script src="js/productos.js"></script>-->
+    <script src="js/productos.js"></script>
+    <script>
+        // Carrito de compras
+        let cart = [];
 
-<script>
-  const opcionesCremas = ["Ají", "Mayonesa", "Mostaza"];
-  const cremasPorProducto = {};
-
-  function abrirModal(productoId) {
-    const inputCantidad = document.querySelector(`.cantidad[data-producto="${productoId}"]`);
-    const cantidad = parseInt(inputCantidad.value);
-    const contenedor = document.getElementById("contenidoModal");
-    contenedor.innerHTML = "";
-
-    cremasPorProducto[productoId] = cremasPorProducto[productoId] || {};
-
-    for (let i = 0; i < cantidad; i++) {
-      const div = document.createElement("div");
-      div.classList.add("mb-3");
-      div.innerHTML = `<strong>${i + 1}:</strong><br>` +
-        opcionesCremas.map(crema => `
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" 
-                   value="${crema}" 
-                   ${cremasPorProducto[productoId][i]?.includes(crema) ? "checked" : ""}
-                   onchange="guardarCremas(${productoId}, ${i}, this)">
-            <label class="form-check-label">${crema}</label>
-          </div>
-        `).join('');
-      contenedor.appendChild(div);
-    }
-
-    new bootstrap.Modal(document.getElementById("modalCremas")).show();
-  }
-
-  function guardarCremas(productoId, unidad, checkbox) {
-    cremasPorProducto[productoId][unidad] = cremasPorProducto[productoId][unidad] || [];
-    const lista = cremasPorProducto[productoId][unidad];
-    if (checkbox.checked) {
-      if (!lista.includes(checkbox.value)) lista.push(checkbox.value);
-    } else {
-      const idx = lista.indexOf(checkbox.value);
-      if (idx >= 0) lista.splice(idx, 1);
-    }
-  }
-
-  function enviarPedido() {
-    let mensaje = "*Pedido:*%0A";
-    let total = 0;
-
-    document.querySelectorAll(".product-card").forEach((card, idx) => {
-      const nombre = card.querySelector(".card-title").innerText;
-      const precio = parseFloat(card.querySelector(".precio").innerText);
-      const cantidad = parseInt(card.querySelector(".cantidad").value);
-      if (cantidad > 0) {
-        mensaje += `- ${nombre} x ${cantidad} = S/ ${precio * cantidad}%0A`;
-        total += precio * cantidad;
-
-        for (let i = 0; i < cantidad; i++) {
-          const seleccionadas = (cremasPorProducto[idx] && cremasPorProducto[idx][i]) || [];
-          mensaje += `    Unidad ${i + 1}: ${seleccionadas.join(", ") || "Sin cremas"}%0A`;
+        // Función para mostrar productos
+        function displayProducts(category = 'todos') {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = '';
+            
+            const filteredProducts = category === 'todos' 
+                ? products 
+                : products.filter(product => product.category === category);
+            
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'col-8 col-md-3 mb-4';
+                productCard.innerHTML = `
+                    <div class="card product-card">
+                        <img src="${product.image}" class="card-img-top" alt="${product.name}">
+                        <div class="card-body">
+                            <h5 class="card-title">${product.name}</h5>
+                            <p class="card-text">S/${product.price.toFixed(2)}</p>
+                            <div class="mb-3">
+                                <label for="quantity-${product.id}" class="form-label">Cantidad:</label>
+                                <input type="number" class="form-control quantity-input" 
+                                       id="quantity-${product.id}" value="1" min="1" 
+                                       data-product-id="${product.id}">
+                            </div>
+                            <div id="details-container-${product.id}" class="detail-inputs mb-3">
+                                <!-- Los inputs de detalles se generarán dinámicamente -->
+                            </div>
+                            <button class="btn btn-primary add-to-cart" data-product-id="${product.id}">
+                                Agregar al Carrito
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(productCard);
+                
+                // Añadir event listener para cambio de cantidad
+                const quantityInput = productCard.querySelector(`#quantity-${product.id}`);
+                quantityInput.addEventListener('change', function() {
+                    updateDetailInputs(product.id, parseInt(this.value));
+                });
+                
+                // Inicializar inputs de detalles
+                updateDetailInputs(product.id, 1);
+                
+                // Añadir evento para agregar al carrito
+                const addButton = productCard.querySelector('.add-to-cart');
+                addButton.addEventListener('click', function() {
+                    addToCart(product.id);
+                });
+            });
         }
-      }
-    });
 
-    mensaje += `%0A*Total:* S/ ${total.toFixed(2)}`;
-    window.open(`https://wa.me/51944634528?text=${mensaje}`, '_blank');
+        // Función para actualizar inputs de detalles basado en la cantidad
+        function updateDetailInputs(productId, quantity) {
+            const detailsContainer = document.getElementById(`details-container-${productId}`);
+            detailsContainer.innerHTML = '';
+            detailsContainer.style.display = quantity > 0 ? 'block' : 'none';
+            
+            for (let i = 1; i <= quantity; i++) {
+                const detailInput = document.createElement('div');
+                detailInput.className = 'mb-2';
+                detailInput.innerHTML = `
+                    <label for="detail-${productId}-${i}" class="form-label">Detalle ${i}:</label>
+                    <input type="text" class="form-control" id="detail-${productId}-${i}" 
+                           placeholder="Especificaciones...">
+                `;
+                detailsContainer.appendChild(detailInput);
+            }
+        }
 
-    document.getElementById("pedidoForm").reset();
-    Object.keys(cremasPorProducto).forEach(k => delete cremasPorProducto[k]);
-  }
-</script>
-<script>
-  function cambiarCantidad(btn, cambio) {
-    const input = btn.parentElement.querySelector('.cantidad');
-    let actual = parseInt(input.value);
-    actual = isNaN(actual) ? 0 : actual;
-    const nuevo = Math.max(0, actual + cambio);
-    input.value = nuevo;
-  }
-</script>
+        // Función para mostrar notificación toast
+        function showToast(message) {
+            const toastContainer = document.getElementById('toastContainer');
+            const toastElement = document.createElement('div');
+            const toastId = `toast-${Date.now()}`;
+            
+            toastElement.className = 'toast';
+            toastElement.setAttribute('role', 'alert');
+            toastElement.setAttribute('aria-live', 'assertive');
+            toastElement.setAttribute('aria-atomic', 'true');
+            toastElement.setAttribute('id', toastId);
+            toastElement.innerHTML = `
+                <div class="toast-body">
+                    <i class="bi bi-check-circle me-2"></i> ${message}
+                </div>
+            `;
+            
+            toastContainer.appendChild(toastElement);
+            
+            const toast = new bootstrap.Toast(toastElement, {
+                delay: 2000,
+                autohide: true
+            });
+            
+            toast.show();
+            
+            // Eliminar el elemento después de ocultarse
+            toastElement.addEventListener('hidden.bs.toast', function() {
+                toastElement.remove();
+            });
+        }
 
+        // Función para agregar productos al carrito
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const quantityInput = document.getElementById(`quantity-${productId}`);
+            const quantity = parseInt(quantityInput.value);
+            
+            if (quantity <= 0) {
+                alert('Por favor seleccione una cantidad válida');
+                return;
+            }
+            
+            // Recopilar detalles de cada unidad
+            const details = [];
+            for (let i = 1; i <= quantity; i++) {
+                const detailInput = document.getElementById(`detail-${productId}-${i}`);
+                details.push(detailInput.value || 'Sin especificaciones');
+            }
+            
+            // Buscar si el producto ya está en el carrito
+            const existingItemIndex = cart.findIndex(item => item.product.id === productId);
+            
+            if (existingItemIndex !== -1) {
+                // Si el producto ya existe, actualizar cantidad, detalles y subtotal
+                const existingItem = cart[existingItemIndex];
+                const newQuantity = existingItem.quantity + quantity;
+                const newSubtotal = product.price * newQuantity;
+                
+                // Combinar los detalles existentes con los nuevos
+                const combinedDetails = [...existingItem.details, ...details];
+                
+                // Actualizar el item en el carrito
+                cart[existingItemIndex] = {
+                    ...existingItem,
+                    quantity: newQuantity,
+                    details: combinedDetails,
+                    subtotal: newSubtotal
+                };
+                
+                showToast(`Agregada(s) ${quantity} unidad(es) más de ${product.name}`);
+            } else {
+                // Si es un producto nuevo, agregarlo al carrito
+                cart.push({
+                    product,
+                    quantity,
+                    details,
+                    subtotal: product.price * quantity
+                });
+                
+                showToast(`${product.name} agregado al carrito`);
+            }
+            
+            // Actualizar visualización del carrito
+            updateCartDisplay();
+            
+            // Resetear los inputs
+            quantityInput.value = 1;
+            updateDetailInputs(productId, 1);
+        }
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        // Función para actualizar la visualización del carrito
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartCountElement = document.getElementById('cartCount');
+            
+            // Actualizar contador del botón
+            let totalItems = 0;
+            cart.forEach(item => totalItems += item.quantity);
+            cartCountElement.textContent = totalItems;
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>No hay productos en el carrito</p>';
+                document.getElementById('totalAmount').textContent = 'S/0.00';
+                return;
+            }
+            
+            let cartHTML = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                total += item.subtotal;
+                
+                cartHTML += `
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <h5>${item.product.name}</h5>
+                                <button class="btn btn-sm btn-danger remove-item" data-index="${index}">X</button>
+                            </div>
+                            <p>Cantidad: ${item.quantity} x S/${item.product.price.toFixed(2)} = $${item.subtotal.toFixed(2)}</p>
+                            <div class="details-list">
+                                <strong>Detalles:</strong>
+                                <ul>
+                                    ${item.details.map((detail, i) => `<li>Unidad ${i+1}: ${detail}</li>`).join('')}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItemsContainer.innerHTML = cartHTML;
+            document.getElementById('totalAmount').textContent = `S/${total.toFixed(2)}`;
+            
+            // Añadir eventos para eliminar items
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    cart.splice(index, 1);
+                    updateCartDisplay();
+                });
+            });
+        }
+
+        // Función para enviar pedido por WhatsApp
+        document.getElementById('sendOrder').addEventListener('click', function() {
+            if (cart.length === 0) {
+                alert('Agregue productos al carrito antes de enviar el pedido');
+                return;
+            }
+            
+            let message = "🛒 *NUEVO PEDIDO* 🛒\n\n";
+            let total = 0;
+            
+            cart.forEach(item => {
+                message += `*${item.product.name}*\n`;
+                message += `Cantidad: ${item.quantity} x S/${item.product.price.toFixed(2)} = S/${item.subtotal.toFixed(2)}\n`;
+                message += "Detalles:\n";
+                
+                item.details.forEach((detail, i) => {
+                    message += `  - Unidad ${i+1}: ${detail}\n`;
+                });
+                
+                message += "\n";
+                total += item.subtotal;
+            });
+            
+            message += `\n*TOTAL: S/${total.toFixed(2)}*`;
+            
+            // Codificar el mensaje para URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Abrir WhatsApp con el mensaje
+            window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+        });
+
+        // Configurar navegación de categorías
+        document.querySelectorAll('#categoryNav .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Actualizar clase activa
+                document.querySelectorAll('#categoryNav .nav-link').forEach(navLink => {
+                    navLink.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Mostrar productos por categoría
+                const category = this.getAttribute('data-category');
+                displayProducts(category);
+                
+                // Si el menú está expandido en móvil, colapsarlo después de la selección
+                const navbarCollapse = document.querySelector('.navbar-collapse');
+                if (navbarCollapse.classList.contains('show')) {
+                    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
+                    bsCollapse.hide();
+                }
+            });
+        });
+
+        // Inicializar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            displayProducts();
+            updateCartDisplay();
+        });
+    </script>
 </body>
 </html>
