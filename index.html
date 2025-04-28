@@ -52,7 +52,7 @@
     <!-- Barra de navegación con menú hamburguesa -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
         <div class="container">
-            <a class="navbar-brand" href="#">Punto de Venta</a>
+            <a class="navbar-brand" href="#">Pide Ahora</a>
             
             <!-- Indicador visual de categorías -->
             <div class="d-lg-none d-flex align-items-center me-3">
@@ -69,13 +69,19 @@
                         <a class="nav-link active" data-category="todos" href="#">Todos</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-category="comidas" href="#">Comidas</a>
+                        <a class="nav-link" data-category="hamburguesa" href="#">Hamburguesas</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-category="bebidas" href="#">Bebidas</a>
+                        <a class="nav-link" data-category="broaster" href="#">Broaster</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-category="postres" href="#">Postres</a>
+                        <a class="nav-link" data-category="otros" href="#">Otros</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-category="jugos" href="#">Jugos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-category="adicionales" href="#">Adicionales</a>
                     </li>
                 </ul>
             </div>
@@ -153,7 +159,7 @@
     <script src="js/productos.js"></script>
     <script>
         // Etiquetas genéricas que se pueden usar en cualquier producto
-        const commonTags = ["Para llevar", "Porción adicional", "Urgente"];
+        const commonTags = ["Delivery" , "Recoger"];
 
         // Carrito de compras
         let cart = [];
@@ -559,7 +565,7 @@
             const encodedMessage = encodeURIComponent(message);
             
             // Abrir WhatsApp con el mensaje
-            window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+            window.open(`https://wa.me/51944634528?text=${encodedMessage}`, '_blank');
         });
 
         // Configurar navegación de categorías
