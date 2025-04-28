@@ -7,7 +7,7 @@ const clone = arr => [...arr];
 
 // Datos de productos
 const products = [
-    {id: 0, estado: 1, name: "Hamburguesa simple", price: 6.00, category: "hamburguesa", image: "images/productos/h-simple.webp", tags: clone(baseTags)},
+    {id: 1, estado: 0, name: "Hamburguesa simple", price: 6.00, category: "hamburguesa", image: "images/productos/h-simple.webp", tags: clone(baseTags)},
     {id: 2, estado: 1, name: "Hamburguesa royal", price: 7.50, category: "hamburguesa", image: "images/productos/h-royal.webp", tags: clone(baseTags)},
     {id: 3, estado: 1, name: "Hamburguesa hawaiana", price: 9.00, category: "hamburguesa", image: "images/productos/h-hawaiana.webp", tags: clone(baseTags)},
     {id: 4, estado: 1, name: "Hamburguesa chorizo", price: 8.00, category: "hamburguesa", image: "images/productos/h-chorizo.webp", tags: clone(baseTags)},
