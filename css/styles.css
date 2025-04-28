@@ -16,7 +16,7 @@ top: 0;
 z-index: 1020;
 }
 .card-img-top {
-height: 180px;
+height: 200px;
 object-fit: cover;
 }
 #cartButton {
